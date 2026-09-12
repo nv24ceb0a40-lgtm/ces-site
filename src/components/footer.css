@@ -1,7 +1,7 @@
 .footer {
   padding: 48px 32px;
-  border-top: 1px solid #ccc;
-  background: #f7f7f5;
+  border-top: 1px solid var(--color-cream-dark);
+  background: var(--color-cream-dark);
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -16,16 +16,18 @@
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  border: 1px solid #ccc;
+  border: none;
+  background: var(--color-navy);
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #000;
+  color: #fff;
   font-size: 18px;
   text-decoration: none;
+  transition: background 0.2s ease, color 0.2s ease;
 }
 
 .social-icon:hover {
-  background: #000;
-  color: #fff;
+  background: var(--color-gold);
+  color: var(--color-navy);
 }

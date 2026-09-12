@@ -7,23 +7,22 @@
   align-items: center;
   justify-content: space-between;
   padding: 0 48px;
-  background: #F5F3EC;
+  background: var(--color-cream);
   border-bottom: 1px solid #DAD5C6;
 }
 
 .header-text {
   font-size: 19px;
   font-weight: 600;
-  color: #1E3350;
+  color: var(--color-navy);
 }
 .header-logo {
   height: 40px;
   width: 40px;
   object-fit: contain;
 }
-.header-left
-{
-   display: flex;
+.header-left {
+  display: flex;
   align-items: center;
   gap: 12px;
 }
@@ -35,9 +34,27 @@
 .header-nav a {
   text-decoration: none;
   font-size: 15px;
-  color: #1E3350;
+  color: var(--color-navy);
+  position: relative;
+  padding-bottom: 4px;
+  transition: color 0.2s ease;
+}
+
+.header-nav a::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: var(--color-gold);
+  transition: width 0.2s ease;
 }
 
 .header-nav a:hover {
-  color: #C4622D;
+  color: var(--color-gold);
+}
+
+.header-nav a:hover::after {
+  width: 100%;
 }

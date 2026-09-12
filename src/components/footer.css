@@ -1,0 +1,31 @@
+.footer {
+  padding: 48px 32px;
+  border-top: 1px solid #ccc;
+  background: #f7f7f5;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.footer-links {
+  display: flex;
+  gap: 20px;
+}
+
+.social-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1px solid #ccc;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #000;
+  font-size: 18px;
+  text-decoration: none;
+}
+
+.social-icon:hover {
+  background: #000;
+  color: #fff;
+}

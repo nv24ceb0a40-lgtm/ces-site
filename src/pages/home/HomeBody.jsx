@@ -1,4 +1,4 @@
-import './Homebody.css';
+import './HomeBody.css';
 function HomeBody() {
   return (
     <main className="home-body">

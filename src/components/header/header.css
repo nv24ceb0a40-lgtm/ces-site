@@ -26,9 +26,28 @@
   align-items: center;
   gap: 12px;
 }
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
 .header-nav {
   display: flex;
   gap: 36px;
+}
+
+.header-helmet {
+  width: 56px;
+  height: 56px;
+  flex: 0 0 auto;
+}
+
+@media (max-width: 600px) {
+  .header-helmet {
+    width: 40px;
+    height: 40px;
+  }
 }
 
 .header-nav a {

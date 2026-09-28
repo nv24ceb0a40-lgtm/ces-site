@@ -1,4 +1,5 @@
-import './Header.css';
+import './header.css';
+import HelmetHero from '../helmet/HelmetHero';
 
 function Header() {
   return (
@@ -23,6 +24,9 @@ function Header() {
           <a href="/team">Team</a>
           <a href="/join">Join us</a>
         </nav>
+        <div className="header-helmet" aria-hidden="true">
+          <HelmetHero />
+        </div>
       </div>
     </header>
   );

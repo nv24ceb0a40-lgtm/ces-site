@@ -1,17 +1,22 @@
-import Header from './components/Header';
-import HomeBody from './components/HomeBody';
-import Footer from './components/footer';
-import HelmetCursor from './components/HelmetCursor';
+import { Routes, Route } from 'react-router-dom';
+import Header from './components/header/header';
+import Footer from './components/footer/footer';
+import HomeBody from './pages/home/HomeBody';
+import Events from './pages/events/Events';
+import Gallery from './pages/gallery/Gallery';
+import Team from './pages/team/Team';
 
-function App() {
+export default function App() {
   return (
-    <div>
-        <HelmetCursor />
+    <>
       <Header />
-     <HomeBody/>
-      <Footer/>
-    </div>
+      <Routes>
+        <Route path="/" element={<HomeBody />} />
+        <Route path="/events" element={<Events />} />
+        <Route path="/gallery" element={<Gallery />} />
+        <Route path="/team" element={<Team />} />
+      </Routes>
+      <Footer />
+    </>
   );
 }
-
-export default App;

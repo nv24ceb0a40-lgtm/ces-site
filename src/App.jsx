@@ -15,7 +15,7 @@ export default function App() {
         <Route path="/events" element={<Events />} />
         <Route path="/gallery" element={<Gallery />} />
         <Route path="/team" element={<Team />} />
-      </Routes>
+      </Routes> 
       <Footer />
     </>
   );

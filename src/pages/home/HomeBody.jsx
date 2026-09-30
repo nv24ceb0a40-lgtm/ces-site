@@ -1,4 +1,5 @@
 import './HomeBody.css';
+import { Link } from 'react-router-dom';
 function HomeBody() {
   return (
     <main className="home-body">
@@ -10,7 +11,7 @@ function HomeBody() {
         <div className="hero-overlay">
           <h1>Civil Engineering Society</h1>
           <p>NIT Warangal</p>
-          <a href="/about" className="hero-btn">About Us</a>
+          <Link to="/about" className="hero-btn">About Us</Link>
         </div>
       </div>
 

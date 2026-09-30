@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import './Team.css';
 
 const sections = [
@@ -47,6 +47,34 @@ const sections = [
       'Ananda Parida',
     ],
   },
+  {
+    title: 'Executives',
+    role: 'Executive',
+    photoDir: '/team/executives',
+    members: [
+      'Marri Hansika',
+      'M. Rishwika Reddy',
+      'Anjan Rao',
+      'Radhey Vardhan',
+      'Vasu Singh Chouhan',
+      'Ashish Biswas',
+      'Ala Sai Teja Royal',
+      'Jeevan Rachamalla',
+      'Harsh Mishra',
+      'Rohit Reddy',
+      'Raghuvansh Tiwari',
+      'Venkatesh Nidamanuri',
+      'Tongar Anjali',
+      'Aarush Kumar',
+      'Srinivas Prasad Gali',
+      'Ananya',
+      'Mohan Priya',
+      'Shlesha Shamya',
+      'Tejansh Gupta',
+      'Shreyesh Sanjay Baviskar',
+      'Naga Sai Akhil',
+    ],
+  },
 ];
 
 function getInitials(name) {
@@ -56,8 +84,16 @@ function getInitials(name) {
   return (first + second).toUpperCase();
 }
 
-function MemberCard({ name, role }) {
+function slugify(name) {
+  return name
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-|-$/g, '');
+}
+
+function MemberCard({ name, role, photoDir }) {
   const cardRef = useRef(null);
+  const [imgFailed, setImgFailed] = useState(false);
 
   const handleMove = (e) => {
     const card = cardRef.current;
@@ -81,6 +117,8 @@ function MemberCard({ name, role }) {
     card.style.setProperty('--rotate-y', '0deg');
   };
 
+  const showPhoto = photoDir && !imgFailed;
+
   return (
     <div
       className="member-card"
@@ -90,15 +128,23 @@ function MemberCard({ name, role }) {
     >
       <div className="member-card-inner">
         <div className="member-card-spotlight" />
-        <div className="member-avatar">{getInitials(name)}</div>
+        <div className={`member-avatar ${showPhoto ? 'has-photo' : ''}`}>
+          {showPhoto ? (
+            <img
+              src={`${photoDir}/${slugify(name)}.jpg`}
+              alt={name}
+              onError={() => setImgFailed(true)}
+            />
+          ) : (
+            getInitials(name)
+          )}
+        </div>
         <h3 className="member-name">{name}</h3>
         <p className="member-role">{role}</p>
       </div>
     </div>
   );
 }
-
-// Team.jsx — just the hero part changes, rest of the file stays the same
 
 function Team() {
   return (
@@ -121,7 +167,12 @@ function Team() {
           <h2 className="team-section-title">{section.title}</h2>
           <div className="team-grid">
             {section.members.map((name) => (
-              <MemberCard key={name} name={name} role={section.role} />
+              <MemberCard
+                key={name}
+                name={name}
+                role={section.role}
+                photoDir={section.photoDir}
+              />
             ))}
           </div>
         </section>

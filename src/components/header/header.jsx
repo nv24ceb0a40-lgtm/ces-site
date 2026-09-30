@@ -1,5 +1,6 @@
 import './header.css';
 import HelmetHero from '../helmet/HelmetHero';
+import { NavLink, Link } from 'react-router-dom'
 
 function Header() {
   return (
@@ -18,11 +19,12 @@ function Header() {
 
       <div className="header-right">
         <nav className="header-nav">
-          <a href="/">Home</a>
-          <a href="/about">About</a>
-          <a href="/events">Events</a>
-          <a href="/team">Team</a>
-          <a href="/join">Join us</a>
+          <NavLink to="/" end>Home</NavLink>
+          <NavLink to="/about">About</NavLink>
+          <NavLink to="/events">Events</NavLink>
+          <NavLink to="/gallery">Gallery</NavLink>
+          <NavLink to="/team">Team</NavLink>
+          <NavLink to="/join">Join us</NavLink>
         </nav>
         <div className="header-helmet" aria-hidden="true">
           <HelmetHero />

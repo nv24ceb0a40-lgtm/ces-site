@@ -9,6 +9,7 @@ import Team from './pages/team/Team';
 import About from './pages/about/About';
 import Join from './pages/join/Join';
 import NotFound from './pages/notfound/NotFound';
+import BackToTop from './components/BackToTop';
 
 export default function App() {
   return (
@@ -25,6 +26,7 @@ export default function App() {
         <Route path="*" element={<NotFound />} />
       </Routes>
       <Footer />
+      <BackToTop />
     </>
   );
 }

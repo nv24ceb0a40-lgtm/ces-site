@@ -1,6 +1,7 @@
 import { useRef, useState } from 'react';
 import './Team.css';
 import Reveal from '../../components/Reveal';
+import useDocumentTitle from '../../hooks/useDocumentTitle';
 
 const sections = [
   {
@@ -148,6 +149,7 @@ function MemberCard({ name, role, photoDir }) {
 }
 
 function Team() {
+  useDocumentTitle('Team');
   return (
     <main className="team-page">
       <div className="team-hero">

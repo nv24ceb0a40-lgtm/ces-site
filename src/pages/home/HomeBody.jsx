@@ -1,6 +1,8 @@
 import './HomeBody.css';
 import { Link } from 'react-router-dom';
+import useDocumentTitle from '../../hooks/useDocumentTitle';
 function HomeBody() {
+  useDocumentTitle();
   return (
     <main className="home-body">
 

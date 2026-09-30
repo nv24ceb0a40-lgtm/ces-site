@@ -101,3 +101,25 @@
     height: 200px;
   }
 }
+.event-modal-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.event-modal-photos-btn {
+  display: inline-block;
+  padding: 12px 28px;
+  border-radius: 30px;
+  border: 2px solid var(--color-navy);
+  color: var(--color-navy);
+  font-weight: 700;
+  font-size: 14px;
+  text-decoration: none;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.event-modal-photos-btn:hover {
+  background: var(--color-navy);
+  color: #fff;
+}

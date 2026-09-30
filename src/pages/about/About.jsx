@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import Reveal from '../../components/Reveal';
 import './About.css';
+import useDocumentTitle from '../../hooks/useDocumentTitle';
 
 const pillars = [
   {
@@ -25,6 +26,7 @@ const stats = [
 ];
 
 function About() {
+useDocumentTitle('About');
   return (
     <main className="about-page">
       <section className="about-hero">

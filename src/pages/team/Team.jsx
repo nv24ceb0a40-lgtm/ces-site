@@ -1,5 +1,6 @@
 import { useRef, useState } from 'react';
 import './Team.css';
+import Reveal from '../../components/Reveal';
 
 const sections = [
   {
@@ -161,9 +162,8 @@ function Team() {
           <p className="team-year">2026 &ndash; 27</p>
         </div>
       </div>
-
       {sections.map((section) => (
-        <section className="team-section" key={section.title}>
+        <Reveal as="section" className="team-section" key={section.title}>
           <h2 className="team-section-title">{section.title}</h2>
           <div className="team-grid">
             {section.members.map((name) => (
@@ -175,7 +175,7 @@ function Team() {
               />
             ))}
           </div>
-        </section>
+        </Reveal>
       ))}
     </main>
   );

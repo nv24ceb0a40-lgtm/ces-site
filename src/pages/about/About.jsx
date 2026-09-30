@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import Reveal from '../../components/Reveal';
 import './About.css';
 
 const pillars = [
@@ -32,7 +33,7 @@ function About() {
         <p className="about-tagline">NIT Warangal</p>
       </section>
 
-      <section className="about-section about-intro">
+      <Reveal as="section" className="about-section about-intro">
         <h2 className="about-section-title">Who We Are</h2>
         <p>
           Placeholder: two or three sentences on the society. When it was founded, who it serves,
@@ -42,36 +43,46 @@ function About() {
           Placeholder: one more paragraph on the culture, the students involved, and what
           members get out of it.
         </p>
-      </section>
+      </Reveal>
 
       <section className="about-section">
         <div className="about-pillars">
-          {pillars.map((p) => (
-            <div className="about-pillar" key={p.title}>
+          {pillars.map((p, i) => (
+            <Reveal className="about-pillar" delay={i * 120} key={p.title}>
               <h3>{p.title}</h3>
               <p>{p.text}</p>
-            </div>
+            </Reveal>
           ))}
         </div>
       </section>
 
-      <section className="about-stats">
+      <Reveal as="section" className="about-section">
+        <h2 className="about-section-title">Events We've Done</h2>
+        <img
+          src="/events-collage.jpg"
+          alt="Collage of events organised by the society"
+          className="about-collage"
+          loading="lazy"
+        />
+      </Reveal>
+
+      <Reveal as="section" className="about-stats">
         {stats.map((s) => (
           <div className="about-stat" key={s.label}>
             <span className="about-stat-value">{s.value}</span>
             <span className="about-stat-label">{s.label}</span>
           </div>
         ))}
-      </section>
+      </Reveal>
 
-      <section className="about-section about-cta">
+      <Reveal as="section" className="about-section about-cta">
         <h2>Want to be part of it?</h2>
         <p>See what we are up to, or meet the people who run the society.</p>
         <div className="about-cta-buttons">
           <Link to="/events" className="about-btn about-btn-primary">View Events</Link>
           <Link to="/team" className="about-btn about-btn-outline">Meet the Team</Link>
         </div>
-      </section>
+      </Reveal>
     </main>
   );
 }

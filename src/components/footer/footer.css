@@ -5,6 +5,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 16px;
 }
 
 .footer-links {
@@ -30,4 +31,16 @@
 .social-icon:hover {
   background: var(--color-gold);
   color: var(--color-navy);
+}
+
+@media (max-width: 600px) {
+  .footer {
+    flex-direction: column;
+    padding: 32px 16px;
+    text-align: center;
+  }
+
+  .footer-links {
+    gap: 16px;
+  }
 }

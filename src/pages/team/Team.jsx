@@ -1,83 +1,9 @@
 import { useRef, useState } from 'react';
 import './Team.css';
+import { FaLinkedinIn, FaInstagram, FaEnvelope } from 'react-icons/fa';
 import Reveal from '../../components/Reveal';
+import { teamSections } from '../../data/team';
 import useDocumentTitle from '../../hooks/useDocumentTitle';
-
-const sections = [
-  {
-    title: 'General Secretaries',
-    role: 'General Secretary',
-    members: ['Pranav VVS', 'Tanmay Sharma'],
-  },
-  {
-    title: 'Secretaries',
-    role: 'Secretary',
-    members: [
-      'Shristi Singh',
-      'Aryan Alok',
-      'Sarah Banerjee',
-      'Perka Hemanth Kumar',
-      'Prateek Prasoon',
-      'Pol Aditya Ravindra',
-    ],
-  },
-  {
-    title: 'Additional Secretaries',
-    role: 'Additional Secretary',
-    members: [
-      'Velaga Meghana',
-      'Allu Lalith Aditya Naidu',
-      'K. Dharani',
-      'Praneela',
-      'Trisha Thodupunuri',
-      'Anshika Singh',
-    ],
-  },
-  {
-    title: 'Joint Secretaries',
-    role: 'Joint Secretary',
-    members: [
-      'Anushka Thakur',
-      'Setu Raj',
-      'Shashank G',
-      'Aman Chaubey',
-      'Avula Vishnu Vardhan',
-      'Anubhav Paliwal',
-      'Ankit Gupta',
-      'Ishwari Kiran Munginwar',
-      'Sudhanshu Sekhar Naik',
-      'Ananda Parida',
-    ],
-  },
-  {
-    title: 'Executives',
-    role: 'Executive',
-    photoDir: '/team/executives',
-    members: [
-      'Marri Hansika',
-      'M. Rishwika Reddy',
-      'Anjan Rao',
-      'Radhey Vardhan',
-      'Vasu Singh Chouhan',
-      'Ashish Biswas',
-      'Ala Sai Teja Royal',
-      'Jeevan Rachamalla',
-      'Harsh Mishra',
-      'Rohit Reddy',
-      'Raghuvansh Tiwari',
-      'Venkatesh Nidamanuri',
-      'Tongar Anjali',
-      'Aarush Kumar',
-      'Srinivas Prasad Gali',
-      'Ananya',
-      'Mohan Priya',
-      'Shlesha Shamya',
-      'Tejansh Gupta',
-      'Shreyesh Sanjay Baviskar',
-      'Naga Sai Akhil',
-    ],
-  },
-];
 
 function getInitials(name) {
   const parts = name.replace('.', '').split(' ').filter(Boolean);
@@ -93,7 +19,7 @@ function slugify(name) {
     .replace(/^-|-$/g, '');
 }
 
-function MemberCard({ name, role, photoDir }) {
+function MemberCard({ name, role, photoDir, email, linkedin, instagram }) {
   const cardRef = useRef(null);
   const [imgFailed, setImgFailed] = useState(false);
 
@@ -143,6 +69,25 @@ function MemberCard({ name, role, photoDir }) {
         </div>
         <h3 className="member-name">{name}</h3>
         <p className="member-role">{role}</p>
+        {(linkedin || instagram || email) && (
+          <div className="member-socials">
+            {linkedin && (
+              <a href={linkedin} target="_blank" rel="noopener noreferrer" aria-label={`${name} on LinkedIn`}>
+                <FaLinkedinIn />
+              </a>
+            )}
+            {instagram && (
+              <a href={instagram} target="_blank" rel="noopener noreferrer" aria-label={`${name} on Instagram`}>
+                <FaInstagram />
+              </a>
+            )}
+            {email && (
+              <a href={`mailto:${email}`} aria-label={`Email ${name}`}>
+                <FaEnvelope />
+              </a>
+            )}
+          </div>
+        )}
       </div>
     </div>
   );
@@ -164,16 +109,19 @@ function Team() {
           <p className="team-year">2026 &ndash; 27</p>
         </div>
       </div>
-      {sections.map((section) => (
+      {teamSections.map((section) => (
         <Reveal as="section" className="team-section" key={section.title}>
           <h2 className="team-section-title">{section.title}</h2>
           <div className="team-grid">
-            {section.members.map((name) => (
+            {section.members.map((m) => (
               <MemberCard
-                key={name}
-                name={name}
-                role={section.role}
+                key={m.name}
+                name={m.name}
+                role={m.role || section.role}
                 photoDir={section.photoDir}
+                email={m.email}
+                linkedin={m.linkedin}
+                instagram={m.instagram}
               />
             ))}
           </div>

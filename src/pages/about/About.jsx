@@ -6,18 +6,28 @@ import useDocumentTitle from '../../hooks/useDocumentTitle';
 const pillars = [
   {
     title: 'Our Mission',
-    text: 'Placeholder: what the society exists to do for civil engineering students at NIT Warangal.',
+    paragraphs: [
+      'To empower civil engineering students at NIT Warangal by providing a dynamic platform for technical growth, practical exposure, and professional development. The society exists to bridge academic learning with industry standards, nurturing ethical, skilled, and industry-ready engineers.',
+      'Through interactive engagement, peer collaboration, and continuous skill enrichment, we cultivate an environment where students excel academically and professionally. We aim to build leadership, teamwork, and problem-solving abilities that prepare every member to excel in the evolving civil engineering landscape.',
+    ],
   },
   {
     title: 'Our Vision',
-    text: 'Placeholder: where the society wants to take students and the department.',
+    paragraphs: [
+      "To propel NIT Warangal's civil engineering students and department toward global leadership in sustainable infrastructure, innovative research, and technological excellence. The society aspires to elevate the department into a prominent hub of civil engineering innovation and academic distinction.",
+      'We envision inspiring future civil engineers to design, build, and lead sustainable, resilient infrastructure that solves pressing societal and environmental challenges. By fostering strong alumni and industry linkages, we strive to position our students at the forefront of engineering advancements worldwide.',
+    ],
   },
   {
     title: 'What We Do',
-    text: 'Workshops, site visits, guest talks, and competitions that connect classroom learning to real construction and design practice.',
+    paragraphs: [
+      'We organize specialized technical workshops, hands-on software training, site visits, expert guest talks, and design competitions that bridge classroom concepts with real-world engineering applications. These activities give students practical exposure to modern construction practices and structural design methodologies.',
+      'Additionally, we host alumni interaction sessions, national-level technical events, project showcases, and mentorship programs. Through these initiatives, members build vital industry networks, practical problem-solving capabilities, and teamwork skills essential for impactful engineering careers.',
+    ],
   },
 ];
 
+// TODO: replace with real numbers before launch
 const stats = [
   { value: '00+', label: 'Events a year' },
   { value: '000+', label: 'Members' },
@@ -26,7 +36,7 @@ const stats = [
 ];
 
 function About() {
-useDocumentTitle('About');
+  useDocumentTitle('About');
   return (
     <main className="about-page">
       <section className="about-hero">
@@ -38,12 +48,15 @@ useDocumentTitle('About');
       <Reveal as="section" className="about-section about-intro">
         <h2 className="about-section-title">Who We Are</h2>
         <p>
-          Placeholder: two or three sentences on the society. When it was founded, who it serves,
-          and how it fits within the Department of Civil Engineering.
+          The Civil Engineering Society is the student body of the Department of Civil
+          Engineering at NIT Warangal. It brings together students from every year to learn
+          beyond the classroom, work on technical projects, and organise events for the
+          department.
         </p>
         <p>
-          Placeholder: one more paragraph on the culture, the students involved, and what
-          members get out of it.
+          Run by students, for students, the society is a place to build skills, meet seniors
+          and industry professionals, and take on responsibility. Members leave with practical
+          experience, a strong network, and the confidence to lead.
         </p>
       </Reveal>
 
@@ -52,7 +65,9 @@ useDocumentTitle('About');
           {pillars.map((p, i) => (
             <Reveal className="about-pillar" delay={i * 120} key={p.title}>
               <h3>{p.title}</h3>
-              <p>{p.text}</p>
+              {p.paragraphs.map((text, j) => (
+                <p key={j}>{text}</p>
+              ))}
             </Reveal>
           ))}
         </div>

@@ -26,10 +26,13 @@
 }
 
 .header-logo {
-  height: 40px;
-  width: 40px;
+  height: 56px;
+  width: 46px;
+  padding: 6px 5px;
+  background: var(--color-navy);
+  border-radius: 10px;
   object-fit: contain;
-  flex: 0 0 auto;
+  filter: drop-shadow(0 0 0.6px #fff); /* thickens hairlines slightly */
 }
 
 .header-text {
@@ -110,6 +113,11 @@
     font-size: 11px;
     letter-spacing: 0.5px;
   }
+.header-logo {
+  height: 46px;
+  width: 38px;
+  padding: 5px 4px;
+}
 
   .header-right {
     gap: 8px;

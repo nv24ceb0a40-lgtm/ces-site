@@ -29,10 +29,10 @@ const pillars = [
 
 // TODO: replace with real numbers before launch
 const stats = [
-  { value: '00+', label: 'Events a year' },
-  { value: '000+', label: 'Members' },
-  { value: '00', label: 'Years running' },
-  { value: '00+', label: 'Industry talks' },
+  { value: '003+', label: 'Events This year' },
+  { value: '60', label: 'Members' },
+  { value: '67+', label: 'Years running' },
+  { value: '00+', label: 'Placement talks' },
 ];
 
 function About() {
@@ -75,12 +75,12 @@ function About() {
 
       <Reveal as="section" className="about-section">
         <h2 className="about-section-title">Events We've Done</h2>
-        <img
+      { /* <img
           src="/events-collage.jpg"
           alt="Collage of events organised by the society"
           className="about-collage"
           loading="lazy"
-        />
+        />*/}
       </Reveal>
 
       <Reveal as="section" className="about-stats">

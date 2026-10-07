@@ -56,7 +56,7 @@ function MemberCard({ name, role, photoDir, email, linkedin, instagram }) {
     >
       <div className="member-card-inner">
         <div className="member-card-spotlight" />
-        <div className={`member-avatar ${showPhoto ? 'has-photo' : ''}`}>
+        <div className="member-avatar">
           {showPhoto ? (
             <img
               src={`${photoDir}/${slugify(name)}.jpg`}
@@ -69,25 +69,23 @@ function MemberCard({ name, role, photoDir, email, linkedin, instagram }) {
         </div>
         <h3 className="member-name">{name}</h3>
         <p className="member-role">{role}</p>
-        {(linkedin || instagram || email) && (
-          <div className="member-socials">
-            {linkedin && (
-              <a href={linkedin} target="_blank" rel="noopener noreferrer" aria-label={`${name} on LinkedIn`}>
-                <FaLinkedinIn />
-              </a>
-            )}
-            {instagram && (
-              <a href={instagram} target="_blank" rel="noopener noreferrer" aria-label={`${name} on Instagram`}>
-                <FaInstagram />
-              </a>
-            )}
-            {email && (
-              <a href={`mailto:${email}`} aria-label={`Email ${name}`}>
-                <FaEnvelope />
-              </a>
-            )}
-          </div>
-        )}
+        <div className="member-socials">
+          {linkedin && (
+            <a href={linkedin} target="_blank" rel="noopener noreferrer" aria-label={`${name} on LinkedIn`}>
+              <FaLinkedinIn />
+            </a>
+          )}
+          {instagram && (
+            <a href={instagram} target="_blank" rel="noopener noreferrer" aria-label={`${name} on Instagram`}>
+              <FaInstagram />
+            </a>
+          )}
+          {email && (
+            <a href={`mailto:${email}`} aria-label={`Email ${name}`}>
+              <FaEnvelope />
+            </a>
+          )}
+        </div>
       </div>
     </div>
   );

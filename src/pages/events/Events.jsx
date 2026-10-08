@@ -1,5 +1,5 @@
-import { useState, useMemo } from 'react';
-import events from '../../data/events';
+import { useState, useMemo, useEffect } from 'react';
+import { getEvents } from '../../services/api';
 import EventModal from './EventModal';
 import './Events.css';
 import useDocumentTitle from '../../hooks/useDocumentTitle';
@@ -20,8 +20,29 @@ function formatDate(dateStr) {
 
 function Events() {
   useDocumentTitle('Events');
+  const [events, setEvents] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [activeTab, setActiveTab] = useState('upcoming');
   const [selectedEvent, setSelectedEvent] = useState(null);
+
+  useEffect(() => {
+    let cancelled = false;
+    getEvents()
+      .then((data) => {
+        if (!cancelled) setEvents(data);
+      })
+      .catch((err) => {
+        console.error(err);
+        if (!cancelled) setError('Could not load events. Please try again later.');
+      })
+      .finally(() => {
+        if (!cancelled) setLoading(false);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   const filtered = useMemo(() => {
     const list = activeTab === 'all' ? [...events] : events.filter((e) => e.status === activeTab);
@@ -31,7 +52,7 @@ function Events() {
         ? new Date(a.date) - new Date(b.date)
         : new Date(b.date) - new Date(a.date);
     });
-  }, [activeTab]);
+  }, [activeTab, events]);
 
   return (
     <main className="events-page">
@@ -55,7 +76,9 @@ function Events() {
       </div>
 
       <section className="events-grid">
-        {filtered.length === 0 && (
+        {loading && <p className="events-empty">Loading events…</p>}
+        {error && <p className="events-empty">{error}</p>}
+        {!loading && !error && filtered.length === 0 && (
           <p className="events-empty">
             No {activeTab === 'all' ? '' : activeTab} events right now. Check back soon.
           </p>
@@ -75,7 +98,7 @@ function Events() {
                   e.currentTarget.style.display = 'none';
                 }}
               />
-              <span className="event-card-tag">{event.tags[0]}</span>
+              <span className="event-card-tag">{event.tags?.[0]}</span>
               <span className={`event-card-status ${event.status}`}>
                 {event.status === 'upcoming' ? '● Upcoming' : 'Past'}
               </span>

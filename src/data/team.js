@@ -30,7 +30,7 @@ export const teamSections = [
       { "name": "Velaga Meghana", "email": "vm24ceb0a56@student.nitw.ac.in", "linkedin": "https://www.linkedin.com/in/velaga-meghana-3953753b2", "instagram": "https://www.instagram.com/meghana_v100" },
       { "name": "Allu Lalith Aditya Naidu", "email": "al24ceb0a04@student.nitw.ac.in", "linkedin": "https://www.linkedin.com/in/allu-lalith-aditya-naidu-54147b333", "instagram": "https://www.instagram.com/aditya.allu_2310" },
       { "name": "K. Dharani", "email": "kd24ceb0b27@student.nitw.ac.in", "linkedin": "https://www.linkedin.com/in/dharani-kammampati-2986a9351" },
-      { "name": "Praneela", "email": "@as24ceb0a03@student.nitw.ac.in", "linkedin": "https://www.linkedin.com/in/sena-sri-praneela-addada-3ab287324", "instagram": "https://www.instagram.com/_.praneela06._" },
+      { "name": "Praneela", "email": "as24ceb0a03@student.nitw.ac.in", "linkedin": "https://www.linkedin.com/in/sena-sri-praneela-addada-3ab287324", "instagram": "https://www.instagram.com/_.praneela06._" },
       { "name": "Trisha Thodupunuri", "role": "Additional Secretary (PR)", "email": "tt24ceb0b53@student.nitw.ac.in" },
       { "name": "Anshika Singh", "email": "as24ceb0a05@student.nitw.ac.in", "linkedin": "https://www.linkedin.com/in/anshika-singh-748344369" },
     ],

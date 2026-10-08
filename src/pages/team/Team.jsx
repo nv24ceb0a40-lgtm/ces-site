@@ -1,8 +1,8 @@
-import { useRef, useState } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import './Team.css';
 import { FaLinkedinIn, FaInstagram, FaEnvelope } from 'react-icons/fa';
 import Reveal from '../../components/Reveal';
-import { teamSections } from '../../data/team';
+import { getTeamSections } from '../../services/api';
 import useDocumentTitle from '../../hooks/useDocumentTitle';
 
 function getInitials(name) {
@@ -93,6 +93,28 @@ function MemberCard({ name, role, photoDir, email, linkedin, instagram }) {
 
 function Team() {
   useDocumentTitle('Team');
+  const [teamSections, setTeamSections] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    let cancelled = false;
+    getTeamSections()
+      .then((data) => {
+        if (!cancelled) setTeamSections(data);
+      })
+      .catch((err) => {
+        console.error(err);
+        if (!cancelled) setError('Could not load the team. Please try again later.');
+      })
+      .finally(() => {
+        if (!cancelled) setLoading(false);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
   return (
     <main className="team-page">
       <div className="team-hero">
@@ -107,13 +129,17 @@ function Team() {
           <p className="team-year">2026 &ndash; 27</p>
         </div>
       </div>
+
+      {loading && <p style={{ textAlign: 'center', padding: '3rem 1rem' }}>Loading team…</p>}
+      {error && <p style={{ textAlign: 'center', padding: '3rem 1rem' }}>{error}</p>}
+
       {teamSections.map((section) => (
         <Reveal as="section" className="team-section" key={section.title}>
           <h2 className="team-section-title">{section.title}</h2>
           <div className="team-grid">
             {section.members.map((m) => (
               <MemberCard
-                key={m.name}
+                key={m.id}
                 name={m.name}
                 role={m.role || section.role}
                 photoDir={section.photoDir}
@@ -128,5 +154,4 @@ function Team() {
     </main>
   );
 }
-
 export default Team;

@@ -1,11 +1,35 @@
-import './HomeBody.css';
+import { useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import useDocumentTitle from '../../hooks/useDocumentTitle';
+import useEvents from '../../hooks/useEvents';
+import useSettings from '../../hooks/useSettings';
+import { joinDefaults } from '../../data/settings';
+import './HomeBody.css';
+
+function formatDate(dateStr) {
+  return new Date(dateStr).toLocaleDateString('en-IN', {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+  });
+}
+
 function HomeBody() {
   useDocumentTitle();
+  const { events } = useEvents();
+  const join = useSettings('join', joinDefaults);
+
+  // the next upcoming event, soonest first
+  const spotlight = useMemo(
+    () =>
+      events
+        .filter((e) => e.status === 'upcoming')
+        .sort((a, b) => new Date(a.date) - new Date(b.date))[0],
+    [events]
+  );
+
   return (
     <main className="home-body">
-
       <div className="hero">
         <video className="hero-video" autoPlay muted loop playsInline>
           <source src="/hero-loop.mp4" type="video/mp4" />
@@ -18,44 +42,48 @@ function HomeBody() {
       </div>
 
       <section className="quick-links">
-        <a href="/about" className="quick-link-card">
+        <Link to="/about" className="quick-link-card">
           <h3>About</h3>
           <p>Who we are and what we do</p>
-        </a>
-        <a href="/events" className="quick-link-card">
+        </Link>
+        <Link to="/events" className="quick-link-card">
           <h3>Events</h3>
           <p>Workshops, site visits, and talks</p>
-        </a>
-        <a href="/team" className="quick-link-card">
+        </Link>
+        <Link to="/team" className="quick-link-card">
           <h3>Team</h3>
           <p>Meet the people running the society</p>
-        </a>
-        <a href="/join" className="quick-link-card">
+        </Link>
+        <Link to="/join" className="quick-link-card">
           <h3>Join us</h3>
-          <p>Recruitment opens soon</p>
-        </a>
+          <p>{join.badge}</p>
+        </Link>
       </section>
 
-      <section className="event-spotlight">
-        <div className="event-details">
-          <div className="event-tags">
-            <span className="event-tag">● Upcoming Event</span>
-            <span className="event-date-tag">Date TBD</span>
+      {spotlight && (
+        <section className="event-spotlight">
+          <div className="event-details">
+            <div className="event-tags">
+              <span className="event-tag">● Upcoming Event</span>
+              <span className="event-date-tag">{formatDate(spotlight.date)}</span>
+            </div>
+            <h2>{spotlight.title}</h2>
+            <p className="event-subtitle">{spotlight.shortDesc}</p>
+            {spotlight.quote && (
+              <blockquote className="event-quote">“{spotlight.quote}”</blockquote>
+            )}
+            <p className="event-desc">{spotlight.longDesc}</p>
+            {spotlight.closingLine && (
+              <p className="event-closing">{spotlight.closingLine}</p>
+            )}
           </div>
-          <h2>Event title goes here</h2>
-          <p className="event-subtitle">Subtitle goes here</p>
-          <blockquote className="event-quote">
-            "A short quote or hook line about the event goes here."
-          </blockquote>
-          <p className="event-desc">
-            Longer description of the event goes here — what it's about, who it's for, why people should come.
-          </p>
-          <p className="event-closing">Closing line or call to action goes here.</p>
-        </div>
-        <div className="event-image">
-          <img src="/inaugral-poster.jpeg" alt="Event poster" />
-        </div>
-      </section>
+          {spotlight.coverImage && (
+            <div className="event-image">
+              <img src={spotlight.coverImage} alt={spotlight.title} />
+            </div>
+          )}
+        </section>
+      )}
     </main>
   );
 }

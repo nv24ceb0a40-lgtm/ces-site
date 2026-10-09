@@ -10,10 +10,14 @@ import About from './pages/about/About';
 import Join from './pages/join/Join';
 import NotFound from './pages/notfound/NotFound';
 import BackToTop from './components/BackToTop';
+import ProtectedRoute from './components/ProtectedRoute';
+import Login from './pages/admin/Login';
+import Dashboard from './pages/admin/Dashboard';
 
 export default function App() {
   return (
     <>
+    
       <ScrollToTop />
       <Header />
       <Routes>
@@ -24,6 +28,15 @@ export default function App() {
         <Route path="/about" element={<About />} />
         <Route path="/join" element={<Join />} />
         <Route path="*" element={<NotFound />} />
+        <Route path="/admin/login" element={<Login />} />
+<Route
+  path="/admin"
+  element={
+    <ProtectedRoute>
+      <Dashboard />
+    </ProtectedRoute>
+  }
+/>
       </Routes>
       <Footer />
       <BackToTop />

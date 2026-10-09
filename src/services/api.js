@@ -1,6 +1,6 @@
 import {
   collection, getDocs, getDoc, addDoc, setDoc, updateDoc, deleteDoc,
-  doc, query, orderBy, serverTimestamp,
+  doc, query, orderBy, serverTimestamp, writeBatch,
 } from "firebase/firestore";
 import { db } from "../firebase";
 
@@ -49,6 +49,13 @@ export const addMember = (id, data) => setDoc(doc(db, "team", id), data);
 export const updateMember = (id, data) => update("team", id, data);
 export const deleteMember = (id) => remove("team", id);
 
+// renumbers `order` for every member in one atomic write
+export const saveTeamOrder = async (orderedIds) => {
+  const batch = writeBatch(db);
+  orderedIds.forEach((id, i) => batch.update(doc(db, "team", id), { order: i }));
+  await batch.commit();
+};
+
 // ---------- settings (about, contact, join) ----------
 export const getSettings = async (name) => {
   const snap = await getDoc(doc(db, "settings", name));
@@ -58,9 +65,11 @@ export const getSettings = async (name) => {
 export const saveSettings = (name, data) =>
   setDoc(doc(db, "settings", name), data, { merge: true });
 
-// ---------- join form (public create, admin read) ----------
+// ---------- join form (public create, admin read/delete) ----------
 export const submitJoin = (data) =>
   add("joinRequests", { ...data, createdAt: serverTimestamp() });
 
 export const getJoinRequests = () =>
   getAll("joinRequests", "createdAt", "desc");
+
+export const deleteJoinRequest = (id) => remove("joinRequests", id);

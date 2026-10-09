@@ -19,7 +19,7 @@ function slugify(name) {
     .replace(/^-|-$/g, '');
 }
 
-function MemberCard({ name, role, photoDir, email, linkedin, instagram }) {
+function MemberCard({ name, role, photoDir, photo, email, linkedin, instagram }) {
   const cardRef = useRef(null);
   const [imgFailed, setImgFailed] = useState(false);
 
@@ -45,7 +45,8 @@ function MemberCard({ name, role, photoDir, email, linkedin, instagram }) {
     card.style.setProperty('--rotate-y', '0deg');
   };
 
-  const showPhoto = photoDir && !imgFailed;
+   const photoSrc = photo || (photoDir ? `${photoDir}/${slugify(name)}.jpg` : '');
+  const showPhoto = photoSrc && !imgFailed;
 
   return (
     <div
@@ -59,7 +60,7 @@ function MemberCard({ name, role, photoDir, email, linkedin, instagram }) {
         <div className="member-avatar">
           {showPhoto ? (
             <img
-              src={`${photoDir}/${slugify(name)}.jpg`}
+              src={photoSrc}
               alt={name}
               onError={() => setImgFailed(true)}
             />
@@ -146,6 +147,7 @@ function Team() {
                 email={m.email}
                 linkedin={m.linkedin}
                 instagram={m.instagram}
+                photo={m.photo}
               />
             ))}
           </div>

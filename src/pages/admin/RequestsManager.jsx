@@ -5,6 +5,18 @@ const fmt = (ts) => (ts?.toDate ? ts.toDate().toLocaleString('en-IN') : '');
 
 const csvCell = (v) => `"${String(v ?? '').replace(/"/g, '""')}"`;
 
+// new submissions have r.answers, old ones have rollNo/year/message
+const getAnswers = (r) => {
+  if (r.answers && r.answers.length > 0) return r.answers;
+  return [
+    { label: 'Full name', value: r.name || '' },
+    { label: 'Roll number', value: r.rollNo || '' },
+    { label: 'Email', value: r.email || '' },
+    { label: 'Year', value: r.year || '' },
+    { label: 'Message', value: r.message || '' },
+  ];
+};
+
 export default function RequestsManager() {
   const [requests, setRequests] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -44,8 +56,31 @@ export default function RequestsManager() {
   };
 
   const exportCsv = () => {
-    const header = ['Name', 'Roll number', 'Email', 'Year', 'Message', 'Submitted'];
-    const rows = requests.map((r) => [r.name, r.rollNo, r.email, r.year, r.message, fmt(r.createdAt)]);
+    // collect every label that appears in any submission, in order
+    const labels = [];
+    for (let i = 0; i < requests.length; i++) {
+      const list = getAnswers(requests[i]);
+      for (let j = 0; j < list.length; j++) {
+        if (labels.indexOf(list[j].label) === -1) labels.push(list[j].label);
+      }
+    }
+
+    const header = [...labels, 'Submitted'];
+    const rows = [];
+    for (let i = 0; i < requests.length; i++) {
+      const list = getAnswers(requests[i]);
+      const row = [];
+      for (let k = 0; k < labels.length; k++) {
+        let value = '';
+        for (let j = 0; j < list.length; j++) {
+          if (list[j].label === labels[k]) value = list[j].value;
+        }
+        row.push(value);
+      }
+      row.push(fmt(requests[i].createdAt));
+      rows.push(row);
+    }
+
     const csv = [header, ...rows].map((row) => row.map(csvCell).join(',')).join('\n');
     const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
     const url = URL.createObjectURL(blob);
@@ -76,10 +111,21 @@ export default function RequestsManager() {
           <li key={r.id} className="admin-row">
             <div className="admin-row-main">
               <strong>{r.name}</strong>
-              <span className="admin-muted">
-                {r.rollNo} · {r.year} · <a href={`mailto:${r.email}`}>{r.email}</a>
-              </span>
-              {r.message && <span>{r.message}</span>}
+              {r.email && (
+                <span className="admin-muted">
+                  <a href={`mailto:${r.email}`}>{r.email}</a>
+                </span>
+              )}
+              {getAnswers(r).map((a, i) => {
+                // name and email are already shown above
+                if (a.value === r.name || a.value === r.email) return null;
+                if (!a.value) return null;
+                return (
+                  <span key={i}>
+                    <b>{a.label}:</b> {a.value}
+                  </span>
+                );
+              })}
               <span className="admin-muted">{fmt(r.createdAt)}</span>
             </div>
             <div className="admin-row-actions">

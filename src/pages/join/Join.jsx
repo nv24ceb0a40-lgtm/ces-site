@@ -6,44 +6,58 @@ import { joinDefaults, contactDefaults } from '../../data/settings';
 import { submitJoin } from '../../services/api';
 import './Join.css';
 
-const YEARS = ['1st year', '2nd year', '3rd year', '4th year', 'Other'];
+function getOptions(text) {
+  const parts = (text || '').split(',');
+  const out = [];
+  for (let i = 0; i < parts.length; i++) {
+    const p = parts[i].trim();
+    if (p) out.push(p);
+  }
+  return out;
+}
 
-function ApplyForm() {
-  const [form, setForm] = useState({
-    name: '',
-    rollNo: '',
-    email: '',
-    year: YEARS[0],
-    message: '',
-    website: '', // honeypot: real people never see or fill this
-  });
+function ApplyForm({ fields }) {
+  const makeInitial = () => {
+    const obj = { website: '' }; // website = honeypot
+    for (let i = 0; i < fields.length; i++) {
+      const f = fields[i];
+      obj[f.id] = f.type === 'select' ? getOptions(f.options)[0] || '' : '';
+    }
+    return obj;
+  };
+
+  const [form, setForm] = useState(makeInitial);
   const [busy, setBusy] = useState(false);
   const [done, setDone] = useState(false);
   const [error, setError] = useState('');
 
-  const bind = (name) => ({
-    value: form[name],
-    onChange: (e) => setForm({ ...form, [name]: e.target.value }),
-  });
+  const setValue = (id, value) => {
+    setForm({ ...form, [id]: value });
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
 
     if (form.website) {
-      setDone(true); // a bot filled the hidden field: pretend it worked
+      setDone(true); // bot filled the hidden field: pretend it worked
       return;
+    }
+
+    const answers = [];
+    let name = '';
+    let email = '';
+    for (let i = 0; i < fields.length; i++) {
+      const f = fields[i];
+      const value = String(form[f.id] || '').trim();
+      answers.push({ label: f.label, value: value });
+      if (f.id === 'name') name = value;
+      if (f.id === 'email') email = value;
     }
 
     setBusy(true);
     try {
-      await submitJoin({
-        name: form.name.trim(),
-        rollNo: form.rollNo.trim(),
-        email: form.email.trim(),
-        year: form.year,
-        message: form.message.trim(),
-      });
+      await submitJoin({ name: name, email: email, answers: answers });
       setDone(true);
     } catch (err) {
       console.error(err);
@@ -63,30 +77,39 @@ function ApplyForm() {
 
   return (
     <form className="join-form" onSubmit={handleSubmit}>
-      <label>
-        Full name
-        <input type="text" required maxLength={99} {...bind('name')} />
-      </label>
-      <label>
-        Roll number
-        <input type="text" required maxLength={29} {...bind('rollNo')} />
-      </label>
-      <label>
-        Email
-        <input type="email" required maxLength={99} {...bind('email')} />
-      </label>
-      <label>
-        Year
-        <select {...bind('year')}>
-          {YEARS.map((y) => (
-            <option key={y} value={y}>{y}</option>
-          ))}
-        </select>
-      </label>
-      <label>
-        Why do you want to join? (optional)
-        <textarea rows="4" maxLength={999} {...bind('message')} />
-      </label>
+      {fields.map((f) => (
+        <label key={f.id}>
+          {f.label}
+          {f.required ? '' : ' (optional)'}
+          {f.type === 'textarea' ? (
+            <textarea
+              rows="4"
+              required={f.required}
+              maxLength={999}
+              value={form[f.id] || ''}
+              onChange={(e) => setValue(f.id, e.target.value)}
+            />
+          ) : f.type === 'select' ? (
+            <select
+              required={f.required}
+              value={form[f.id] || ''}
+              onChange={(e) => setValue(f.id, e.target.value)}
+            >
+              {getOptions(f.options).map((o) => (
+                <option key={o} value={o}>{o}</option>
+              ))}
+            </select>
+          ) : (
+            <input
+              type={f.type}
+              required={f.required}
+              maxLength={199}
+              value={form[f.id] || ''}
+              onChange={(e) => setValue(f.id, e.target.value)}
+            />
+          )}
+        </label>
+      ))}
 
       <input
         type="text"
@@ -94,7 +117,8 @@ function ApplyForm() {
         autoComplete="off"
         aria-hidden="true"
         style={{ position: 'absolute', left: '-9999px' }}
-        {...bind('website')}
+        value={form.website}
+        onChange={(e) => setValue('website', e.target.value)}
       />
 
       {error && <p className="join-form-error">{error}</p>}
@@ -110,6 +134,8 @@ export default function Join() {
   const join = useSettings('join', joinDefaults);
   const contact = useSettings('contact', contactDefaults);
 
+  const fields =
+    join.fields && join.fields.length > 0 ? join.fields : joinDefaults.fields;
 
   return (
     <main className="join-page">
@@ -128,7 +154,7 @@ export default function Join() {
         </ul>
 
         {join.isOpen ? (
-          <ApplyForm />
+          <ApplyForm key={fields.length} fields={fields} />
         ) : (
           <div className="join-cta">
             <p>{join.ctaText}</p>

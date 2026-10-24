@@ -1,5 +1,7 @@
 import { useState } from 'react';
 import { useSaver } from './useSaver';
+import JoinFieldsEditor from './JoinFieldsEditor';
+import { joinDefaults } from '../../data/settings';
 
 export default function JoinForm({ initial }) {
   const { busy, status, save } = useSaver('join');
@@ -7,14 +9,34 @@ export default function JoinForm({ initial }) {
   const [badge, setBadge] = useState(initial.badge || '');
   const [ctaText, setCtaText] = useState(initial.ctaText || '');
   const [perks, setPerks] = useState((initial.perks || []).join('\n'));
+  const [fields, setFields] = useState(
+    initial.fields && initial.fields.length > 0 ? initial.fields : joinDefaults.fields
+  );
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    // drop fields with empty labels
+    const cleanFields = [];
+    for (let i = 0; i < fields.length; i++) {
+      const f = fields[i];
+      if (f.label && f.label.trim()) {
+        cleanFields.push({
+          id: f.id,
+          label: f.label.trim(),
+          type: f.type,
+          required: Boolean(f.required),
+          options: f.options || '',
+        });
+      }
+    }
+
     save({
       isOpen,
       badge: badge.trim(),
       ctaText: ctaText.trim(),
       perks: perks.split('\n').map((s) => s.trim()).filter(Boolean),
+      fields: cleanFields,
     });
   };
 
@@ -42,6 +64,8 @@ export default function JoinForm({ initial }) {
         Perks (one per line)
         <textarea rows="6" value={perks} onChange={(e) => setPerks(e.target.value)} />
       </label>
+
+      <JoinFieldsEditor fields={fields} onChange={setFields} />
 
       {status.text && (
         <p className={status.type === 'ok' ? 'admin-success' : 'admin-error'}>{status.text}</p>

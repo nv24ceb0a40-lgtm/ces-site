@@ -15,6 +15,13 @@ export const joinDefaults = {
     'Guest talks and competitions',
     'A network across batches',
   ],
+  fields: [
+  { id: 'name', label: 'Full name', type: 'text', required: true, options: '' },
+  { id: 'rollNo', label: 'Roll number', type: 'text', required: true, options: '' },
+  { id: 'email', label: 'Email', type: 'email', required: true, options: '' },
+  { id: 'year', label: 'Year', type: 'select', required: true, options: '1st year, 2nd year, 3rd year, 4th year, Other' },
+  { id: 'message', label: 'Why do you want to join?', type: 'textarea', required: false, options: '' },
+],
 };
 
 export const aboutDefaults = {

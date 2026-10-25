@@ -120,6 +120,7 @@ export default function TeamManager() {
     }
   };
 
+  // move a member up/down inside their own section
   const move = async (m, dir) => {
     const ids = members.map((x) => x.id);
     const sectionIds = members.filter((x) => x.sectionTitle === m.sectionTitle).map((x) => x.id);
@@ -127,13 +128,37 @@ export default function TeamManager() {
     if (!otherId) return;
     const i = ids.indexOf(m.id);
     const j = ids.indexOf(otherId);
-    [ids[i], ids[j]] = [ids[j], ids[i]];
+    const tmp = ids[i];
+    ids[i] = ids[j];
+    ids[j] = tmp;
     try {
       await saveTeamOrder(ids);
       reload();
     } catch (err) {
       console.error(err);
       setError('Could not reorder.');
+    }
+  };
+
+  // move a whole section up/down (e.g. Faculty to the top)
+  const moveSection = async (title, dir) => {
+    const idx = sections.findIndex((s) => s.title === title);
+    const j = idx + dir;
+    if (idx === -1 || j < 0 || j >= sections.length) return;
+    const next = sections.slice();
+    const tmp = next[idx];
+    next[idx] = next[j];
+    next[j] = tmp;
+    const ids = [];
+    next.forEach((s) => {
+      s.members.forEach((m) => ids.push(m.id));
+    });
+    try {
+      await saveTeamOrder(ids);
+      reload();
+    } catch (err) {
+      console.error(err);
+      setError('Could not reorder sections.');
     }
   };
 
@@ -158,9 +183,23 @@ export default function TeamManager() {
       {loading && <p className="admin-muted">Loading…</p>}
       {error && <p className="admin-error">{error}</p>}
 
-      {sections.map((s) => (
+      {sections.map((s, si) => (
         <div className="admin-group" key={s.title}>
-          <h3>{s.title} <span className="admin-muted">({s.members.length})</span></h3>
+          <h3>
+            {s.title} <span className="admin-muted">({s.members.length})</span>{' '}
+            <button
+              className="admin-btn admin-btn-ghost"
+              onClick={() => moveSection(s.title, -1)}
+              disabled={si === 0}
+              aria-label={`Move ${s.title} section up`}
+            >↑</button>
+            <button
+              className="admin-btn admin-btn-ghost"
+              onClick={() => moveSection(s.title, 1)}
+              disabled={si === sections.length - 1}
+              aria-label={`Move ${s.title} section down`}
+            >↓</button>
+          </h3>
           <ul className="admin-list">
             {s.members.map((m, i) => (
               <li key={m.id} className="admin-row">
